@@ -23,8 +23,9 @@ db.connect((err) => {
 const app = express();
 app.use(cors());
 app.use(bodyParser.json())
+
 // Insert
-app.post('/addCategory', (req, res) => {
+app.post('/addExpense', (req, res) => {
     const {category, amount, description } = req.body;
     let data = 
     {
@@ -39,6 +40,17 @@ app.post('/addCategory', (req, res) => {
             throw err;     
     });
     res.send("Expense Inserted");
+});
+
+app.get('/getExpenses', (req, res) =>{
+    let sql = 'SELECT * FROM expenses WHERE YEAR(date) = 2020 AND MONTH(date) = 10;'
+    db.query(sql, function (error, results, fields) {
+        if(error)
+            throw error;
+        else
+            res.send(results);
+      });
+    // res.send("Ok");
 });
 
 
