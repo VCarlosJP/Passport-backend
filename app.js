@@ -39,18 +39,23 @@ app.post('/addExpense', (req, res) => {
         if(err)
             throw err;     
     });
-    res.send("Expense Inserted");
+    res.send(data);
 });
 
 app.get('/getExpenses', (req, res) =>{
-    let sql = 'SELECT * FROM expenses WHERE YEAR(date) = 2020 AND MONTH(date) = 10;'
+    let category = req.query.category;
+    let year = req.query.year;
+    let month = req.query.month;
+    let filteredYearMonthQuery = `SELECT * FROM expenses WHERE YEAR(date) = ${year} AND MONTH(date) = ${month}`
+    
+    let sql = category==='' || category==='All' ? filteredYearMonthQuery : filteredYearMonthQuery+` AND category = "${category}"`
+
     db.query(sql, function (error, results, fields) {
         if(error)
             throw error;
         else
             res.send(results);
       });
-    // res.send("Ok");
 });
 
 
